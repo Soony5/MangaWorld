@@ -1,30 +1,42 @@
 
 async function searchResults(keyword) {
     try {
+
         const url = `https://www.mangaworld.mx/archive?keyword=${encodeURIComponent(keyword)}`;
         const response = await soraFetch(url);
+        
+        if (!response) {
+            console.log("Errore: Nessuna risposta dal server.");
+            return JSON.stringify([]);
+        }
+
         const html = await response.text();
+        
+
+        console.log("HTML ricevuto, lunghezza: " + html.length);
 
         const results = [];
-        // Regex per estrarre i dati dalle "entry" di MangaWorld
-        const regex = /<div class="entry">[\s\S]*?<a href="([^"]+)" title="([^"]+)">[\s\S]*?<img[^>]*src="([^"]+)"/g;
+        
+        
+        const regex = /<div class="entry">[\s\S]*?<a[^>]+href="([^"]+)"[^>]+title="([^"]+)"[\s\S]*?<img[^>]+src="([^"]+)"/g;
 
         let match;
         while ((match = regex.exec(html)) !== null) {
             results.push({
                 title: match[2].trim(),
                 href: match[1].trim(),
-                image: match[3].trim()
+
+                image: match[3].startsWith('http') ? match[3].trim() : 'https:' + match[3].trim()
             });
         }
 
+        console.log("Risultati trovati: " + results.length);
         return JSON.stringify(results);
     } catch (error) {
-        console.log('Errore in searchResults: ' + error);
+        console.log('Errore nella ricerca: ' + error);
         return JSON.stringify([]);
     }
 }
-
 
 async function extractDetails(url) {
     try {
