@@ -1,39 +1,42 @@
 
 async function searchResults(keyword) {
     try {
-
+        // L'URL dell'archivio è corretto per MangaWorld
         const url = `https://www.mangaworld.mx/archive?keyword=${encodeURIComponent(keyword)}`;
         const response = await soraFetch(url);
-        
-        if (!response) {
-            console.log("Errore: Nessuna risposta dal server.");
-            return JSON.stringify([]);
-        }
-
         const html = await response.text();
         
-
         console.log("HTML ricevuto, lunghezza: " + html.length);
 
         const results = [];
         
-        
-        const regex = /<div class="entry">[\s\S]*?<a[^>]+href="([^"]+)"[^>]+title="([^"]+)"[\s\S]*?<img[^>]+src="([^"]+)"/g;
+        // 1. Troviamo tutti i blocchi che iniziano con <div class="entry
+        // Usiamo una regex più "larga" per prendere l'intero blocco del risultato
+        const entryRegex = /<div class="entry[^>]*>([\s\S]*?)<\/div>\s*<\/div>/g;
+        let entryMatch;
 
-        let match;
-        while ((match = regex.exec(html)) !== null) {
-            results.push({
-                title: match[2].trim(),
-                href: match[1].trim(),
+        while ((entryMatch = entryRegex.exec(html)) !== null) {
+            const block = entryMatch[1]; // Questo è il pezzetto di HTML di un singolo titolo
+            
+            // 2. Estraiamo i dati dal singolo blocco
+            const hrefMatch = block.match(/href="([^"]+)"/);
+            const titleMatch = block.match(/title="([^"]+)"/);
+            const srcMatch = block.match(/src="([^"]+)"/);
 
-                image: match[3].startsWith('http') ? match[3].trim() : 'https:' + match[3].trim()
-            });
+            if (hrefMatch && titleMatch && srcMatch) {
+                results.push({
+                    title: titleMatch[1].trim(),
+                    href: hrefMatch[1].trim(),
+                    // Gestiamo le immagini che iniziano con // invece di http
+                    image: srcMatch[1].startsWith('//') ? 'https:' + srcMatch[1] : srcMatch[1]
+                });
+            }
         }
 
-        console.log("Risultati trovati: " + results.length);
+        console.log("Risultati trovati dopo analisi: " + results.length);
         return JSON.stringify(results);
     } catch (error) {
-        console.log('Errore nella ricerca: ' + error);
+        console.log('Errore in searchResults: ' + error);
         return JSON.stringify([]);
     }
 }
