@@ -12,7 +12,7 @@
     "quality": "N/A",
     "baseUrl": "https://www.mangaworld.mx/",
     "searchBaseUrl": "https://www.mangaworld.mx/archive?keyword=%s",
-    "scriptUrl": "https://raw.githubusercontent.com/TUO-USERNAME/TUO-REPO/main/mangaworld.js",
+    "scriptUrl": "https://raw.githubusercontent.com/Soony5/MangaWorld/refs/heads/main/mangaworld.js",
     "type": "manga",
     "asyncJS": true,
     "novel": true
