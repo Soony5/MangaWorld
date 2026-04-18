@@ -1,19 +1,19 @@
 {
-    "sourceName": "MangaWorld Novels",
-    "iconUrl": "https://www.mangaworld.mx/favicon.ico",
+    "sourceName": "MangaWorld",
+    "iconUrl": "https://www.google.com/s2/favicons?sz=128&domain_url=mangaworld.mx",
     "author": {
         "name": "Soony5",
         "icon": "https://i.postimg.cc/RVkn062P/icon.png",
         "url": "https://github.com/Soony5"
     },
     "version": "1.0.0",
-    "language": "Italian",
-    "streamType": "novels",
+    "language": "Italian (ITA)",
+    "streamType": "manga",
     "quality": "N/A",
     "baseUrl": "https://www.mangaworld.mx/",
     "searchBaseUrl": "https://www.mangaworld.mx/archive?keyword=%s",
-    "scriptUrl": "https://raw.githubusercontent.com/Soony5/MangaWorld/refs/heads/main/mangaworld.js",
-    "type": "novels",
+    "scriptUrl": "https://raw.githubusercontent.com/TUO-USERNAME/TUO-REPO/main/mangaworld.js",
+    "type": "manga",
     "asyncJS": true,
     "novel": true
 }
