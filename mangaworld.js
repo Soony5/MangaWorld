@@ -66,8 +66,8 @@ async function extractChapters(url) {
         const htmlText = await response.text();
         
         const chapters = [];
-        // Matches HTML like: <a class=chap href=https://www.mangaworld.mx/manga/.../read/... title="..."><span ...>Capitolo 1</span>
-        const regex = /class=chap href=(https:\/\/www\.mangaworld\.mx\/manga\/[^/]+\/[^/]+\/read\/[^ >"']+)[^>]*>[\s\S]*?<span[^>]*>([\s\S]*?)<\/span>/g;
+        // Regex ottimizzata (senza [\\s\\S]*? che causava blocchi e lentezza)
+        const regex = /class=chap href=(https:\/\/www\.mangaworld\.mx\/manga\/[^/]+\/[^/]+\/read\/[^ >"']+)[^>]*>(?:<[^>]+>)*([^<]+)<\/span>/g;
         
         let match;
         const seen = new Set();
@@ -147,7 +147,7 @@ async function extractText(url) {
         } else {
             // Wait, what if Mangaworld DOES have text Light Novels and they put them in <div id="page"> ?
             // Let's have a fallback text extractor
-            const contentInner = htmlText.match(/<div id="page"[^>]*>([\s\S]*?)<\/div>/);
+            const contentInner = htmlText.match(/<div id="page"[^>]*>([^<]*)<\/div>/);
             if(contentInner) {
                  content = contentInner[1].trim();
             }
