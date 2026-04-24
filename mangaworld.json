@@ -15,5 +15,6 @@
     "scriptUrl": "https://raw.githubusercontent.com/Soony5/MangaWorld/refs/heads/main/mangaworld.js",
     "type": "novels",
     "asyncJS": true,
-    "novel": true
+    "novel": true,
+    "downloadSupport": false
 }
